@@ -19,12 +19,8 @@ dependencies {
 	implementation 'org.jsoup:jsoup:1.13.1'
 }
 
-jar {
-	enabled = true
-}
-
 bootJar {
-	mainClass = 'com.sreenathofficial.webcrawler.WebcrawlerApplication'
+	enabled = true
 }
 
 test {
