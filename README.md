@@ -3,7 +3,7 @@
 ### Introduction
 This is a simple web crawler. Once this project is built and run, it will expose an API. This API can be used to receive the sitemap of URLs the program has crawled through. The output of the API call will be in JSON format.
 
-###Get Started
+### Get Started
 
 ####Requirements
 Operating System:  
@@ -14,38 +14,38 @@ Java JDK 11
 Gradle 6.8.3  
 Git  
 
-####How to install JDK 11  
+#### How to install JDK 11  
 [This page has a good guide on how to install JDK on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-on-ubuntu-20-04)
-####How to install Gradle
+#### How to install Gradle
 [Here is good guide on how to install gradle on Ubuntu 20.04](https://linuxize.com/post/how-to-install-gradle-on-ubuntu-20-04/)  
-####How to install Git
+#### How to install Git
 [Installing Git on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-git-on-ubuntu-20-04)  
 
-####Testing JDK, Gradle and Git installation
+#### Testing JDK, Gradle and Git installation
 Open a terminal on your linux machine and type in below commands. You should receive the something similar to the outputs shown below if the installation has been successful.  
-######Command
+###### Command
 ```
 java -version
 ```
-######Output
+###### Output
 ```
 openjdk version "11.0.10" 2021-01-19
 OpenJDK Runtime Environment (build 11.0.10+9-Ubuntu-0ubuntu1.20.04)
 OpenJDK 64-Bit Server VM (build 11.0.10+9-Ubuntu-0ubuntu1.20.04, mixed mode, sharing)
 ```
-######Command
+###### Command
 ```
 git --version
 ```
-######Output
+###### Output
 ```
 git version 2.25.1
 ```
-######Command
+###### Command
 ```
 gradle -v
 ```
-######Output
+###### Output
 ```
 ------------------------------------------------------------
 Gradle 6.8.3
@@ -62,9 +62,9 @@ OS:           Linux 5.8.0-50-generic amd64
 ```
 If all the outputs on your terminal look similar, then we are one step closer to running the web crawler.  
 
-###Building the web crawler
+### Building the web crawler
 Execute the below commands one by one to clone and build our web crawler.  
-######Commands
+###### Commands
 ```
 cd /tmp
 git clone https://github.com/sreenathisapro/webcrawler.git
@@ -73,7 +73,7 @@ gradle build
 ```
 
 Once all the above commands are execute, we are ready to start our web crawler API. Execute the below commands to start our web crawler API.
-######Commands
+###### Commands
 ```
 cd build/libs
 java -jar webcrawler-0.0.1-SNAPSHOT.jar
@@ -100,13 +100,13 @@ Once the above commands are run you will be able to see an output like below. Wh
 2021-04-28 03:01:49.842  INFO 12421 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
 2021-04-28 03:01:49.852  INFO 12421 --- [           main] c.s.webcrawler.WebcrawlerApplication     : Started WebcrawlerApplication in 1.771 seconds (JVM running for 2.102)
 ```
-###Testing
+### Testing
 Once our API is up and running you can test the API using CURL like show below.
 ```
 curl -v http://localhost:8080/crawl?url=https%3A%2F%2Fwww.crawler-test.com%2Fmobile%2Fresponsive
 ```
 
-Output:
+###### Output
 
 ```
 * Trying 127.0.0.1:8080...
