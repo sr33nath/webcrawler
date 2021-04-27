@@ -22,9 +22,19 @@ package com.sreenathofficial.webcrawler.api.model.dto;
 
 import java.util.List;
 
+/**
+ * Link class is the data structure used to store the sitemap for the value in variable url
+ */
 public class Link {
 
+    /**
+     * Used to store the url
+     */
     private String url;
+
+    /**
+     * Link objects created using url discovered from the web page pointed to by this.url
+     */
     private List<Link> childLinks;
 
     public Link(final String url){

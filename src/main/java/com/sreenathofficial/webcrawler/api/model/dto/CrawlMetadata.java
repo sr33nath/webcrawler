@@ -22,10 +22,21 @@ package com.sreenathofficial.webcrawler.api.model.dto;
 
 import java.util.Set;
 
+/**
+ * CrawlMetadata class holds data relevant to perform a single crawl
+ */
 public class CrawlMetadata {
 
+    /**
+     * Starting url for the crawl.
+     * Newly discovered urls from this Link would be added to rootLink.childLinks
+     */
     private Link rootLink;
 
+
+    /**
+     * Used to store already crawled URLs so that no duplication happens
+     */
     private Set<String> discoveredUrls;
 
     public CrawlMetadata(Link rootLink, Set<String> discoveredUrls){

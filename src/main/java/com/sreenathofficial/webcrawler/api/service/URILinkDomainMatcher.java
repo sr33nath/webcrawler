@@ -34,9 +34,14 @@ public class URILinkDomainMatcher implements LinkDomainMatcher {
     Logger logger = LoggerFactory.getLogger(URILinkDomainMatcher.class);
 
     /**
+     * Method accepts two link objects as parameters
      * @param link
      * @param otherLink
-     * @return
+     * Matches link.url and otherLink.url to find if their domain component is the same
+     * if yes
+     * @return true
+     * if no
+     * @return false
      */
     @Override
     public boolean match(Link link, Link otherLink) {

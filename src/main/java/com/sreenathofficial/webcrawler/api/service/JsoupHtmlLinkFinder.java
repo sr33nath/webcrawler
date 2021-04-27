@@ -32,6 +32,10 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JsoupHtmlLinkFinder contains logic to parse URLs or links present in an HTML page
+ * Jsoup library is used to accomplish this.
+ */
 @Service
 public class JsoupHtmlLinkFinder implements HtmlLinkFinder {
 
@@ -41,8 +45,16 @@ public class JsoupHtmlLinkFinder implements HtmlLinkFinder {
     private WebContentDownloader webContentDownloader;
 
     /**
+     * Method accepts single Link object with single url
      * @param link
-     * @return
+     * Downloads the html content from that url
+     * Uses Jsoup library to find
+     * href from anchor tags
+     * href from link tags
+     * src from img tags
+     * src from script tags
+     * Add the found values to List of Link objects
+     * @return List of Link objects
      */
     @Override
     public List<Link> findChildLinks(Link link) {

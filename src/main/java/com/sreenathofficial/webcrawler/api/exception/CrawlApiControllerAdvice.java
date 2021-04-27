@@ -37,9 +37,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * CrawlApiControllerAdvice class hosts all the logic to handle all kinds of exception happens in the CrawlApiController class
+ * @see com.sreenathofficial.webcrawler.api.controller.CrawlerApiController
+ */
 @ControllerAdvice
 public class CrawlApiControllerAdvice extends ResponseEntityExceptionHandler {
 
+    /**
+     * Return HTTP STATUS 400 and error message in below JSON format if ValidationException is thrown from CrawlerApiController
+     *
+     * @param ex
+     * @param request
+     * @return {"timestamp":"2021-04-28T00:54:34.00625","message":"Dummy error message"}
+     */
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(
             ValidationException ex, WebRequest request) {
@@ -51,6 +62,13 @@ public class CrawlApiControllerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Return HTTP STATUS 500 and error message in below JSON format if CrawlApiException is thrown from CrawlerApiController
+     *
+     * @param ex
+     * @param request
+     * @return {"timestamp":"2021-04-28T00:54:34.00625","message":"Dummy error message"}
+     */
     @ExceptionHandler(CrawlApiException.class)
     public ResponseEntity<Object> handleCrawlApiException(
             CrawlApiException ex, WebRequest request) {
@@ -62,6 +80,16 @@ public class CrawlApiControllerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Return HTTP STATUS 400 and error message in below JSON format if MethodArgumentNotValidException is thrown from CrawlerApiController
+     * ie. any other HTTP METHOD is used in the request other than GET
+     *
+     * @param ex
+     * @param headers
+     * @param status
+     * @param request
+     * @return {"timestamp":"2021-04-28T00:54:34.00625","status":"DUMMY_HTTP_STATUS",errors:["error_1", "error_2"]}
+     */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers,
@@ -82,6 +110,16 @@ public class CrawlApiControllerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Return HTTP STATUS 400 and error message in below JSON format if MissingServletRequestParameterException is thrown from CrawlerApiController
+     * ie. if any mandatory HTTP params are missing in the request
+     *
+     * @param ex
+     * @param headers
+     * @param status
+     * @param request
+     * @return {"timestamp":"2021-04-28T00:54:34.00625","message":"Dummy error message"}
+     */
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
             MissingServletRequestParameterException ex, HttpHeaders headers,
@@ -93,6 +131,16 @@ public class CrawlApiControllerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Return HTTP STATUS 404 and error message in below JSON format if NoHandlerFoundException is thrown from CrawlerApiController
+     * ie. if the url in the HTTP request is not configured to be handled by CrawlerApiController
+     *
+     * @param ex
+     * @param headers
+     * @param status
+     * @param request
+     * @return {"timestamp":"2021-04-28T00:54:34.00625","message":"Dummy error message"}
+     */
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(
             NoHandlerFoundException ex, HttpHeaders headers,

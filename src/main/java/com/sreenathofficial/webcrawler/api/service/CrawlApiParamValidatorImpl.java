@@ -30,14 +30,22 @@ import org.springframework.util.StringUtils;
 
 import java.net.URI;
 
+/**
+ * CrawlApiParamValidatorImpl class contains logic for validating crawl API HTTP params
+ */
 @Service
 public class CrawlApiParamValidatorImpl implements CrawlApiParamValidator{
 
     Logger logger = LoggerFactory.getLogger(CrawlApiParamValidatorImpl.class);
 
     /**
+     * This method is used to validate crawl API HTTP request params
      * @param url
-     * @return
+     * @return true based on below criteria
+     * If the url passed into the method is a valid URI or non-empty or non-null
+     * @see java.net.URI
+     * Or if the URL responds with content/type text/html
+     * else
      * @throws ValidationException
      */
     @Override

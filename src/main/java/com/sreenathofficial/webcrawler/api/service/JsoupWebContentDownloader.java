@@ -29,14 +29,23 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
+/**
+ * JsoupWebContentDownloader contains logic to download html content from url
+ * Jsoup library is used to accomplish this
+ */
 @Service
 public class JsoupWebContentDownloader implements WebContentDownloader {
 
     Logger logger = LoggerFactory.getLogger(JsoupWebContentDownloader.class);
 
     /**
+     * Accepts a url as a String
      * @param url
-     * @return
+     * Uses Jsoup library to connect to the URL and download the text/html content as String
+     * @return HTML content as String
+     * If the url is not a valid URI or if the web page return content-type other than text/html
+     * @see java.net.URI
+     * @return null
      */
     @Override
     public String getHtmlAsString(final String url) {

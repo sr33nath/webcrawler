@@ -4,7 +4,7 @@ plugins {
 	id 'java'
 }
 
-group = 'com.buildit'
+group = 'com.sreenathofficial'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -17,6 +17,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	implementation 'org.jsoup:jsoup:1.13.1'
+}
+
+jar {
+	enabled = true
+}
+
+bootJar {
+	mainClass = 'com.sreenathofficial.webcrawler.WebcrawlerApplication'
 }
 
 test {

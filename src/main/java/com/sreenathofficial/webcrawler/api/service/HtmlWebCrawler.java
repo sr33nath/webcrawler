@@ -42,8 +42,12 @@ public class HtmlWebCrawler implements WebCrawler {
     private LinkDomainMatcher linkDomainMatcher;
 
     /**
+     * Method used to initiate crawling of a single URL
      * @param url
-     * @return
+     * Wraps the url in Link object. Link object is the data structure used to store the sitemap
+     * Initialises new Set object to hold crawled urls temporarily so that no repeat happens
+     * Calls the crawl method which implements the crawl logic
+     * @return CrawlMetadata
      */
     @Override
     public CrawlMetadata crawl(final String url) {
@@ -53,8 +57,14 @@ public class HtmlWebCrawler implements WebCrawler {
     }
 
     /**
-     * @param link
-     * @param crawlMetadata
+     * Receives Link object and CrawlMetadata object as parameters
+     * @param link used to store url and urls in the web page pointed to by the link.url
+     * @param crawlMetadata used to store discovered urls temporarily
+     * Checks if url already crawled by searching urls stored in crawlMetadata.discoveredUrls
+     * If yes returns, if not stores the url in crawlMetadata.discoveredUrls
+     * Finds the links in the web page returned by link.url.
+     * Inserts the links found from the link.url in link.childLinks
+     * Calls the method recursively on discovered link.childLinks
      */
     private void crawl(Link link, CrawlMetadata crawlMetadata) {
 

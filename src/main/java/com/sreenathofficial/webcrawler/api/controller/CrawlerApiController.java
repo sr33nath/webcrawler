@@ -36,6 +36,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * CrawlerApiController is the main class that handles the business logic of the GET /crawl API call.
+ * The logic to handle GET /crawl REST API call is inside the crawl() method
+ */
 @RestController
 public class CrawlerApiController {
 
@@ -51,9 +55,15 @@ public class CrawlerApiController {
     private CrawlApiParamValidator crawlApiValidator;
 
     /**
+     * Method accepts url as a String
      * @param url
-     * @return
+     * @return site map for the passed URL as a JSON string
+     * If the url passed into the method is not a valid URI
+     * Or empty or null
+     * Or if the URL does not respond with content/type text/html
      * @throws ValidationException
+     * @see java.net.URI
+     * In case any other type of uncaught exception happens
      * @throws CrawlApiException
      */
     @RequestMapping( path = "/crawl", method = RequestMethod.GET)
