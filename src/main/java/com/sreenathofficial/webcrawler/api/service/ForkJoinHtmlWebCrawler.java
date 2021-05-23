@@ -28,14 +28,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.RecursiveAction;
 
 @Service
-@Profile("default")
-public class HtmlWebCrawler implements WebCrawler {
+@Profile("forkjoin")
+public class ForkJoinHtmlWebCrawler implements WebCrawler {
 
-    Logger logger = LoggerFactory.getLogger(HtmlWebCrawler.class);
+    Logger logger = LoggerFactory.getLogger(ForkJoinHtmlWebCrawler.class);
 
     @Autowired
     private HtmlLinkFinder linkFinder;
@@ -53,7 +56,10 @@ public class HtmlWebCrawler implements WebCrawler {
      */
     @Override
     public CrawlMetadata crawl(final String url) {
-        final CrawlMetadata crawlMetadata = new CrawlMetadata(new Link(url), new HashSet<>());
+
+        final Set<String> discoveredUrls = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
+        final CrawlMetadata crawlMetadata = new CrawlMetadata(new Link(url), discoveredUrls);
         crawl(crawlMetadata.getRootLink(), crawlMetadata);
         return crawlMetadata;
     }
@@ -72,29 +78,9 @@ public class HtmlWebCrawler implements WebCrawler {
 
         try {
 
-            logger.info("Crawling url: {}", link.getUrl());
+            ForkJoinPool commonPool = ForkJoinPool.commonPool();
 
-            final Set<String> discoveredUrls = crawlMetadata.getDiscoveredUrls();
-
-            if(discoveredUrls.contains(link.getUrl().toLowerCase())){
-                logger.info("Already crawled url: {}", link.getUrl());
-                return;
-            }else{
-                discoveredUrls.add(link.getUrl().toLowerCase());
-            }
-
-            if(linkDomainMatcher.match(crawlMetadata.getRootLink(), link)) {
-                link.setChildLinks(linkFinder.findChildLinks(link));
-            }else{
-                logger.info("url: {}, does not belong to root domain", link.getUrl());
-                return;
-            }
-
-            for(Link childLink: link.getChildLinks()){
-                if(!discoveredUrls.contains(childLink.getUrl().toLowerCase())) {
-                    crawl(childLink, crawlMetadata);
-                }
-            }
+            commonPool.invoke(new CrawlAction(link, crawlMetadata));
 
         } catch(Exception e){
             logger.error(e.getMessage(), e);
@@ -102,4 +88,49 @@ public class HtmlWebCrawler implements WebCrawler {
 
     }
 
+    private class CrawlAction extends RecursiveAction{
+
+        private Link link;
+
+        private Set<String> discoveredUrls;
+
+        private CrawlMetadata crawlMetadata;
+
+        private CrawlAction(Link ln, CrawlMetadata metadata){
+            link = ln;
+            crawlMetadata = metadata;
+            discoveredUrls = crawlMetadata.getDiscoveredUrls();
+        }
+
+        @Override
+        protected void compute() {
+
+            if(discoveredUrls.contains(link.getUrl().toLowerCase())){
+                logger.info("Already crawled url: {}", link.getUrl());
+                return;
+            }
+
+            if(linkDomainMatcher.match(crawlMetadata.getRootLink(), link)) {
+                link.setChildLinks(linkFinder.findChildLinks(link));
+                discoveredUrls.add(link.getUrl().toLowerCase());
+            }else{
+                logger.info("url: {}, does not belong to root domain", link.getUrl());
+                discoveredUrls.add(link.getUrl().toLowerCase());
+                return;
+            }
+
+            if(link.getChildLinks()!=null && link.getChildLinks().size() > 0){
+                ForkJoinTask.invokeAll(getChildLinkCrawlTasks(link.getChildLinks()));
+            }
+
+        }
+
+        private List<CrawlAction> getChildLinkCrawlTasks(List<Link> links){
+            final List<CrawlAction> crawlTasks = new ArrayList<>();
+            for(Link link: links){
+                crawlTasks.add(new CrawlAction(link, crawlMetadata));
+            }
+            return crawlTasks;
+        }
+    }
 }
